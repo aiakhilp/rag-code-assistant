@@ -36,13 +36,17 @@ rag-code-assistant/
 
 Quick Start (with Sample Data & Embeddings)
 
-    Clone the Repo & Setup
+    git clone https://github.com/<yourusername>/rag-code-assistant.git
+    cd rag-code-assistant
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
 
-git clone https://github.com/<yourusername>/rag-code-assistant.git
-cd rag-code-assistant
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+
+
+
+    
+
 
 Set your OpenAI API Key
 
