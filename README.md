@@ -1,144 +1,163 @@
-RAG Code Assistant is an AI-powered, documentation-aware coding helper that answers your programming questions, finds real code examples from documentation, debugs code, and remembers the context of your conversation.
-It uses RAG (Retrieval-Augmented Generation) technology: when you ask a question, it looks up relevant info in your documentation and brings that knowledge into its answer.
-Features at a Glance
+RAG Code Assistant
 
-    Ask Anything: Write questions in plain English—get code, explanations, or doc-based answers.
+    An AI-powered code assistant that grounds answers in real documentation using RAG (Retrieval-Augmented Generation).
+    Sample data and embeddings are included—you can start immediately!
 
-    Real Doc Answers: Retrieves code and explanations from real documentation, not just AI guesses.
+Features
 
-    Debugging Help: Paste code with errors to get fixes and explanations.
+    Natural Language Understanding: Ask questions in plain English.
 
-    Context Awareness: Remembers your conversation, so you can build up tasks step by step.
+    Code Generation & Retrieval: Get code snippets and examples—generated or pulled from real docs.
 
-    Parallel Assistant: Runs in your browser—keep it open next to your IDE/editor.
+    RAG-powered Doc Search: Answers are grounded in official/sample documentation via embeddings.
 
-    Customizable: Use it with any documentation (your own, open source, official docs).
+    Debugging Assistance: Paste buggy code to get explanations and fixes.
 
-Quick Start
-1. Prerequisites
+    Context Awareness: Multi-turn, conversational support—follow up on previous queries.
 
-    Python 3.8+
+    Traditional + AI Methods: Combines classic techniques (regex, AST, FAISS) with modern AI (embeddings, GPT).
 
-    OpenAI API Key
-    (Set it with: export OPENAI_API_KEY="sk-...")
+    Ready-to-Run: Comes with sample data and embeddings. No setup needed to try it out!
 
-2. Clone and Set Up the Project
+Project Structure
 
-git clone <your_repo_url>
+rag-code-assistant/
+│
+├── app.py               # Streamlit web app
+├── agent.py             # Main agent logic
+├── retriever.py         # RAG (retriever & embedding) logic
+├── context.py           # Context manager
+├── utils.py             # Utilities (intent detection, etc.)
+├── requirements.txt
+├── README.md
+│
+├── data/                # Sample documentation (e.g. quickstart.html)
+├── embeddings/          # Prebuilt vector index and metadata (e.g. .pkl, .index)
+
+Quick Start (with Sample Data & Embeddings)
+
+    Clone the Repo & Setup
+
+git clone https://github.com/<yourusername>/rag-code-assistant.git
 cd rag-code-assistant
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-3. Add Documentation
+Set your OpenAI API Key
 
-    Default: Comes with Python Requests "Quickstart" doc (data/quickstart.html)
+export OPENAI_API_KEY="sk-..."  # Your OpenAI key
 
-    Custom:
-
-        Save your documentation in the data/ folder (.html, .txt, or .md)
-
-        Example: data/flask_docs.html
-
-4. Embed Documentation (One-Time or When Docs Change)
-
-    Update retriever.py to use your doc (change doc_path variable).
-
-    Run:
-
-python retriever.py
-
-This splits your docs into chunks, creates embeddings, and builds a search index.
-5. Run the Assistant
-
-streamlit run app.py
-
-    The app opens in your browser.
-
-    Keep it open beside your coding window for instant access.
-
-How to Use
-Ask for Code Examples or Doc Info
-
-    “Show me an example of file upload with requests.”
-
-    “How do I set headers in requests?”
-
-Debug Your Code
-
-    Paste code (with or without errors) and ask for fixes.
-
-    for i in range(5
-        print(i)
-
-Get Explanations or Write New Code
-
-    “Write a Python function to check if a string is a palindrome.”
-
-    “What is a Python list comprehension?”
-
-Multi-Turn Conversation
-
-    Build up your queries:
-
-        “How do I fetch JSON from an API?”
-
-        “How do I print a specific field from the JSON response?”
-
-How to Add Your Own Documentation
-
-    Save docs as .html, .txt, or .md in /data/.
-
-        Example: data/my_project_docs.html
-
-    Edit the doc_path variable in retriever.py to point to your file.
-
-    Re-run:
-
-python retriever.py
-
-Restart the assistant:
+Run the Assistant
 
     streamlit run app.py
 
-You can repeat this for any doc, as often as you like!
+    That’s it!
+
+        The app opens in your browser.
+
+        You can immediately start asking questions—no need to preprocess docs or build embeddings.
+
+How to Use
+
+    Ask for code examples:
+    “Show me an example of a GET request with requests”
+
+    Get explanations:
+    “How do I send query parameters?”
+
+    Debug your code:
+    Paste buggy code and ask: “Fix this code”
+
+    Follow up:
+    “Now make it print only even numbers”
+
+    Multi-turn:
+    The assistant remembers your queries and context.
+
+How It Works
+
+    Documentation (in /data) is broken into text chunks and embedded using OpenAI embeddings.
+
+    Embeddings (in /embeddings) are indexed with FAISS for fast, semantic similarity search.
+
+    On your question:
+    The assistant retrieves relevant doc chunks using RAG and augments the prompt sent to GPT, improving factuality and reliability.
+
+    Intent classification and static code checks are handled with lightweight, traditional Python methods for speed and accuracy.
+
+Adding Your Own Documentation
+
+If you want to use your own docs or expand the knowledge base:
+
+    Save your documentation as .html, .txt, or .md in the /data/ directory.
+
+        Example: data/flask_docs.html
+
+    Edit retriever.py
+
+        Change the doc_path variable (or extend to use multiple docs).
+
+        Example:
+
+    doc_path = "data/flask_docs.html"
+
+Rebuild Embeddings & Index
+
+python retriever.py
+
+    This processes your new docs and saves fresh embeddings and FAISS index in /embeddings.
+
+Restart the Assistant
+
+    streamlit run app.py
+
+        Now your assistant will use your custom documentation for RAG-powered answers.
+
 Troubleshooting
 
-    “Assistant isn’t using my new docs!”
+    Assistant not using new docs?
 
-        Double-check your doc_path in retriever.py
+        Double-check your doc file and doc_path in retriever.py.
 
-        Make sure you re-ran python retriever.py
+        Make sure you re-ran python retriever.py.
 
-        Restart the assistant (Ctrl+C and re-run the streamlit command)
+        Restart the Streamlit app.
 
-    “App won’t start!”
+    App won’t start?
 
-        Ensure your Python environment is activated
+        Ensure your virtual environment is activated and dependencies are installed.
 
-        OpenAI API key is set:
-        export OPENAI_API_KEY="sk-..."
+        Make sure you’ve set your OpenAI API key.
 
-    “Assistant answers seem generic.”
+    Slow or generic answers?
 
-        Try to phrase your question as it appears in your documentation.
+        For best performance, use reasonably sized documentation.
 
-        Add more docs or increase your chunk size in retriever.py if needed.
+        Phrase your questions clearly, as they might appear in documentation.
 
-Pro Tips
+Extending & Customizing
 
-    View Doc Chunks: Enable logging in retriever.py to see what docs are retrieved (great for demoing RAG).
+    Add more documentation files and adjust chunking for larger docs.
 
-    Use With Any Docs: Works with HTML, Markdown, or plain text.
+    Enhance the UI to show retrieved doc chunks.
 
-    Privacy: No code is sent anywhere except to OpenAI for answer generation. (Docs stay local.)
+    Integrate other LLMs or embedding providers.
 
-Example Queries (for Python Requests Docs)
+    Add support for more programming languages or frameworks.
 
-    “Show me an example of making a POST request.”
+Sample Queries for Demo
 
-    “How do I handle timeouts with requests?”
+    “Show me an example of making a POST request with requests.”
 
-    “How to check response status code?”
+    “How do I upload a file with requests?”
 
-    “Upload a file using requests.”
+    “Write a function to check if a string is a palindrome.”
+
+    “Fix this code: for i in range(5 print(i)”
+
+Contributing & Support
+
+    Pull requests welcome!
+
+    For issues or questions, open an issue on this repo.
