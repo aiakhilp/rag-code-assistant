@@ -1,0 +1,6 @@
+openai>=1.0.0
+faiss-cpu
+streamlit
+beautifulsoup4
+requests
+tqdm
